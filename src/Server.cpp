@@ -26,7 +26,8 @@ Server::Server(ServerPool* pool, const String& addr, bool isStatic):
     mStatic(isStatic),
     mFail(false),
     mOnline(true),
-    mUpdating(false)
+    mUpdating(false),
+    mLoading(false)
 {
     if (auto dataCenter = pool->proxy()->dataCenter()) {
         mDC = dataCenter->getDC(addr);

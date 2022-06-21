@@ -82,7 +82,7 @@ Server* ServerGroup::getReadServer(Handler* h) const
     int cnt = mServs.size();
     for (int i = 0; i < cnt; ++i) {
         Server* s = mServs[i];
-        if (!s->online()) {
+        if (!s->online() || s->loading()) {
             continue;
         }
         int rp = 0;

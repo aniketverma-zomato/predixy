@@ -105,6 +105,7 @@ private:
     void configGetRequest(Request* req);
     void configSetRequest(Request* req);
     bool redirect(ConnectConnection* c, Request* req, Response* res, bool moveOrAsk);
+    bool retry(Request* req);
     bool permission(Request* req, const String& key, Response::GenericCode& code);
     void resetStats();
     void setAcceptConnectionActiveTime(AcceptConnection* c)

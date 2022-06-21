@@ -802,6 +802,16 @@ void Handler::handleResponse(ConnectConnection* s, Request* req, Response* res)
                 c->peer(), c->fd(), c->status(), c->statusStr());
         return;
     }
+
+    if (res->type() == Reply::Error && res->isLoading()) {
+        Server* serv = s->server();
+        serv->setLoading(true);
+        if (retry(req)) {
+            handleRequest(req);
+            return;
+        }
+    }
+
     if (sp->type() == ServerPool::Cluster && res->type() == Reply::Error) {
         if (res->isMoved()) {
             if (redirect(s, req, res, true)) {
@@ -1373,6 +1383,9 @@ void Handler::innerResponse(ConnectConnection* s, Request* req, Response* res)
                 logNotice("h %d s %s %d mark server alive",
                         id(), s->peer(), s->fd());
             }
+            if (serv->loading()) {
+                serv->setLoading(false);
+            }
         }
         break;
     case Command::AuthServ:
@@ -1424,6 +1437,15 @@ void Handler::innerResponse(ConnectConnection* s, Request* req, Response* res)
     default:
         break;
     }
+}
+
+bool Handler::retry(Request* req) {
+    int retryCounts = req->retryCnt();
+    if (retryCounts > Request::MaxRetryLimit) {
+        return false;
+    }
+    req->incrRetryCnt();
+    return true;
 }
 
 bool Handler::redirect(ConnectConnection* c, Request* req, Response* res, bool moveOrAsk)
