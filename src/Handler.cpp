@@ -812,7 +812,6 @@ void Handler::handleResponse(ConnectConnection* s, Request* req, Response* res)
         Server* serv = s->server();
         serv->setLoading(true);
         if (retry(req)) {
-            handleRequest(req);
             return;
         }
     }
@@ -1389,6 +1388,8 @@ void Handler::innerResponse(ConnectConnection* s, Request* req, Response* res)
                         id(), s->peer(), s->fd());
             }
             if (serv->loading()) {
+                logNotice("h %d s %s %d mark server unloading",
+                        id(), s->peer(), s->fd());
                 serv->setLoading(false);
             }
         }
@@ -1445,11 +1446,15 @@ void Handler::innerResponse(ConnectConnection* s, Request* req, Response* res)
 }
 
 bool Handler::retry(Request* req) {
+    FuncCallTimer();
     int retryCounts = req->retryCnt();
     if (retryCounts > Request::MaxRetryLimit) {
+        logError("h %d retry limit exceeded", id());
         return false;
     }
     req->incrRetryCnt();
+    req->rewind();
+    handleRequest(req);
     return true;
 }
 
