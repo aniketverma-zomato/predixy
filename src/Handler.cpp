@@ -470,11 +470,6 @@ ConnectConnection* Handler::getConnectConnection(Request* req, Server* serv)
     return p->getShareConnection(db);
 }
 
-ConnectConnection* Handler::getConnectConnectionPublic(Request* req, Server* serv)
-{
-    return this->getConnectConnection(req, serv);
-}
-
 int Handler::checkClientTimeout(long timeout)
 {
     int num = 0;

@@ -94,7 +94,7 @@ void ClusterServerPool::handleResponse(Handler* h, ConnectConnection* s, Request
         serv->setUpdating(true);
         if (serv->loading()) {
             RequestPtr ping = RequestAlloc::create(Request::PingServ);
-            ConnectConnection* s1 = h->getConnectConnectionPublic(ping, serv);
+            ConnectConnection* s1 = h->getConnectConnection(ping, serv);
             h->handleRequest(ping, s1);
         }
     }
