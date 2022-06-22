@@ -31,6 +31,7 @@ public:
     void handleResponse(ConnectConnection* c, Request* req, Response* res);
     void handleResponse(ConnectConnection* c, Request* req, Response::GenericCode code);
     void directResponse(Request* req, Response::GenericCode code, ConnectConnection* s=nullptr);
+    ConnectConnection* getConnectConnectionPublic(Request* req, Server* s);
     Proxy* proxy() const
     {
         return mProxy;
