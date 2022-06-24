@@ -85,6 +85,10 @@ Server* ServerGroup::getReadServer(Handler* h) const
         if (!s->online()) {
             continue;
         }
+        if (s->loading()) {
+            logDebug("server is having loading state %s", s->addr().data());
+            continue;
+        }
         int rp = 0;
         if (s->role() == Server::Master) {
             rp = mPool->masterReadPriority();

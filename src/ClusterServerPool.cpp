@@ -92,7 +92,13 @@ void ClusterServerPool::handleResponse(Handler* h, ConnectConnection* s, Request
     p.set(res->body());
     for (auto serv : mServPool) {
         serv->setUpdating(true);
+        if (serv->loading()) {
+            RequestPtr ping = RequestAlloc::create(Request::PingServ);
+            ConnectConnection* s1 = h->getConnectConnection(ping, serv);
+            h->handleRequest(ping, s1);
+        }
     }
+    
     while (true) {
         ClusterNodesParser::Status st = p.parse();
         if (st == ClusterNodesParser::Node) {

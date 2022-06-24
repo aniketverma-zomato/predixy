@@ -27,6 +27,7 @@ public:
     typedef ListNode<Request, SharePtr<Request>, RequestListIndex::Size> ListNodeType;
     typedef Alloc<Request, Const::RequestAllocCacheSize> Allocator;
     static const int MaxRedirectLimit = 3;
+    static const int MaxRetryLimit = 3;
     enum GenericCode
     {
         Ping,
@@ -162,6 +163,14 @@ public:
     {
         return mCreateTime;
     }
+    int retryCnt() const
+    {
+        return mRetryCnt;
+    }
+    int incrRetryCnt()
+    {
+        return ++mRetryCnt;
+    }
 private:
     AcceptConnection* mConn;
     Command::Type mType;
@@ -176,6 +185,7 @@ private:
     int mFollowers;
     int mFollowersDone;
     int mRedirectCnt;
+    int mRetryCnt;
     long mCreateTime; //steady time point us
     void* mData; //user data for response
 };

@@ -128,6 +128,10 @@ public:
     {
         return mRes;
     }
+    bool isLoading() const
+    {
+        return mType == Reply::Error && mRes.hasPrefix("-LOADING ");
+    }
 private:
     bool getAddr(int& slot, SString<Const::MaxAddrLen>& addr, const char* token) const;
 private:

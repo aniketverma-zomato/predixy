@@ -31,6 +31,7 @@ public:
     void handleResponse(ConnectConnection* c, Request* req, Response* res);
     void handleResponse(ConnectConnection* c, Request* req, Response::GenericCode code);
     void directResponse(Request* req, Response::GenericCode code, ConnectConnection* s=nullptr);
+    ConnectConnection* getConnectConnection(Request* req, Server* s);
     Proxy* proxy() const
     {
         return mProxy;
@@ -92,7 +93,6 @@ private:
     void handleConnectConnectionEvent(ConnectConnection* c, int evts);
     void postAcceptConnectionEvent();
     void postConnectConnectionEvent();
-    ConnectConnection* getConnectConnection(Request* req, Server* s);
     void refreshServerPool();
     void checkConnectionPool();
     int checkClientTimeout(long timeout);
@@ -105,6 +105,7 @@ private:
     void configGetRequest(Request* req);
     void configSetRequest(Request* req);
     bool redirect(ConnectConnection* c, Request* req, Response* res, bool moveOrAsk);
+    bool retry(Request* req);
     bool permission(Request* req, const String& key, Response::GenericCode& code);
     void resetStats();
     void setAcceptConnectionActiveTime(AcceptConnection* c)

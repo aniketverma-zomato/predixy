@@ -124,6 +124,14 @@ public:
     {
         mUpdating = v;
     }
+    bool loading() const
+    {
+        return mLoading;
+    }
+    void setLoading(bool v)
+    {
+        mLoading = v;
+    }
 private:
     ServerPool* mPool;
     ServerGroup* mGroup;
@@ -139,6 +147,7 @@ private:
     bool mFail;
     bool mOnline;
     bool mUpdating;
+    bool mLoading;
 };
 
 #endif
