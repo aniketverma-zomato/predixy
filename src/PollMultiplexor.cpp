@@ -51,6 +51,7 @@ void PollMultiplexor::delSocket(Socket* s)
 
 bool PollMultiplexor::addEvent(Socket* s, int evts)
 {
+    logNotice("ANIKET LOGS %d", (evts & ReadEvent));
     int e = 0;
     e |= (evts & ReadEvent) ? POLLIN : 0;
     e |= (evts & WriteEvent) ? POLLOUT : 0;

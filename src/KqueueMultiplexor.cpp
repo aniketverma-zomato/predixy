@@ -40,6 +40,7 @@ void KqueueMultiplexor::delSocket(Socket* s)
 
 bool KqueueMultiplexor::addEvent(Socket* s, int evts)
 {
+    
     if ((evts & ReadEvent) && !(s->getEvent() & ReadEvent)) {
         struct kevent event;
         EV_SET(&event, s->fd(), EVFILT_READ, EV_ADD, 0, 0, s);

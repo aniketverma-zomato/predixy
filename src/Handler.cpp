@@ -261,6 +261,7 @@ void Handler::postConnectConnectionEvent()
                 {
                     Server* serv = s->server();
                     serv->incrFail();
+                   
                     if (serv->fail()) {
                         logNotice("server %s mark failure", serv->addr().data());
                     }

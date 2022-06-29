@@ -51,6 +51,7 @@ bool Server::activate()
 void Server::incrFail()
 {
     long cnt = ++mFailureCnt;
+     logNotice("ANIKET LOGS SERVER FAIL ATTEMPT %ld", cnt);
     if (cnt % mPool->serverFailureLimit() == 0) {
         setFail(true);
     }
