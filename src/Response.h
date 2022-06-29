@@ -132,6 +132,10 @@ public:
     {
         return mType == Reply::Error && mRes.hasPrefix("-LOADING ");
     }
+    bool isClosed() const
+    {
+        return mType == Reply::Error && mRes.hasPrefix("-ERR server connection close");
+    }
 private:
     bool getAddr(int& slot, SString<Const::MaxAddrLen>& addr, const char* token) const;
 private:

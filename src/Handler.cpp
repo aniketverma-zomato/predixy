@@ -811,6 +811,13 @@ void Handler::handleResponse(ConnectConnection* s, Request* req, Response* res)
         }
     }
 
+    if (res->type() == Reply::Error && res->isClosed()) {
+        logNotice("ANIKET LOGS server connection closed %d ignore req %ld res %ld for c %s %d with status %d %s",
+                id(), req->id(), res->id(),
+                c->peer(), c->fd(), c->status(), c->statusStr());
+        
+    }
+
     if (sp->type() == ServerPool::Cluster && res->type() == Reply::Error) {
         if (res->isMoved()) {
             if (redirect(s, req, res, true)) {
