@@ -208,8 +208,8 @@ void Handler::postAcceptConnectionEvent()
             }
         }
         if ((!c->good()||(evts & Multiplexor::ErrorEvent)) && c->fd() >= 0){
-            logNotice("h %d remove c %s %d with status %d %s",
-                    id(), c->peer(), c->fd(), c->status(), c->statusStr());
+            // logNotice("h %d remove c %s %d with status %d %s",
+                    // id(), c->peer(), c->fd(), c->status(), c->statusStr());
             mEventLoop->delSocket(c);
             if (auto s = c->connectConnection()) {
                 auto cp = mConnPool[s->server()->id()];
@@ -368,7 +368,7 @@ void Handler::addAcceptSocket(int fd, sockaddr* addr, socklen_t len)
                 id(), c->peer(), c->fd(), StrError());
         AcceptConnectionAlloc::destroy(c);
     } else {
-        logNotice("h %d accept c %s %d assign to h %d", id(), c->peer(), fd, dst->id());
+        // logNotice("h %d accept c %s %d assign to h %d", id(), c->peer(), fd, dst->id());
     }
 }
 
