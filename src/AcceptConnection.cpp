@@ -239,6 +239,7 @@ bool AcceptConnection::send(Handler* h, Request* req, Response* res)
 {
     FuncCallTimer();
     if (mRequests.front()->isDone()) {
+        logNotice("ANIKET LOGS AcceptConnection CHECK");
         return true;
     }
     return false;
