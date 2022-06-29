@@ -383,6 +383,7 @@ void Handler::handleAcceptConnectionEvent(AcceptConnection* c, int evts)
         ++mStats.clientConnections;
     }
     if (evts & Multiplexor::ErrorEvent) {
+        logNotice("ANIKET LOGS handleAcceptConnectionEvent error");
         c->setStatus(AcceptConnection::EventError);
     }
     try {
@@ -409,7 +410,7 @@ void Handler::handleConnectConnectionEvent(ConnectConnection* s, int evts)
     FuncCallTimer();
     logVerb("h %d s %s %d ev %d", id(), s->peer(), s->fd(), evts);
     if (evts & Multiplexor::ErrorEvent) {
-        logDebug("h %d s %s %d error event",
+        logError("ANIKET LOGS handleConnectConnectionEvent ERROR h %d s %s %d error event",
                 id(), s->peer(), s->fd());
         s->setStatus(ConnectConnection::EventError);
     }
