@@ -86,6 +86,27 @@ void ClusterServerPool::refreshRequest(Handler* h)
     h->handleRequest(req);
 }
 
+void ClusterServerPool::removeServer(Server* serv) {
+    if (nullptr == serv) return;
+    logNotice("redis cluster delete old server %s %s %s %s %s",
+                serv->name().data(),
+                serv->addr().data(),
+                serv->roleStr(),
+                serv->masterName().data(),
+                serv->dcName().data());
+    ServerGroup* g = getGroup(serv->name());
+    if (serv->group() && serv->group() != g) {
+        serv->group()->remove(serv);
+    }
+    auto mapServ = mServs.find(serv->addr());
+    if (mapServ != mServs.end())
+    {
+      mServs.erase(mapServ);
+    }
+    delete serv;
+}
+
+
 void ClusterServerPool::handleResponse(Handler* h, ConnectConnection* s, Request* req, Response* res)
 {
     ClusterNodesParser p;
@@ -154,6 +175,7 @@ void ClusterServerPool::handleResponse(Handler* h, ConnectConnection* s, Request
             } else {
                 serv->setUpdating(false);
             }
+
             serv->setRole(p.role());
             serv->setName(p.nodeId());
             serv->setMasterName(p.master());
@@ -193,9 +215,12 @@ void ClusterServerPool::handleResponse(Handler* h, ConnectConnection* s, Request
             return;
         }
     }
-    for (auto serv : mServPool) {
+    for (std::vector<Server*>::iterator it = mServPool.begin(); it != mServPool.end();) {
+        auto serv = *it;
         if (serv->updating()) {
             serv->setUpdating(false);
+            it = mServPool.erase(it); 
+            removeServer(serv);
             continue;
         }
         if (serv->role() == Server::Master) {
@@ -233,6 +258,7 @@ void ClusterServerPool::handleResponse(Handler* h, ConnectConnection* s, Request
                 g->remove(serv);
             }
         }
+        ++it;
     }
 }
 
