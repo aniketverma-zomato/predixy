@@ -98,12 +98,6 @@ void ClusterServerPool::removeServer(Server* serv) {
     if (serv->group() && serv->group() != g) {
         serv->group()->remove(serv);
     }
-    auto mapServ = mServs.find(serv->addr());
-    if (mapServ != mServs.end())
-    {
-      mServs.erase(mapServ);
-    }
-    delete serv;
 }
 
 
